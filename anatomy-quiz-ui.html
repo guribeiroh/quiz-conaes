@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anatomia Sem Medo - Quiz Clínico</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1c1c1c;
+            --secondary: #333333;
+            --accent: #22a7f0;
+            --accent-dark: #0082c8;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --text: #f8f9fa;
+            --text-dark: #e2e2e2;
+            --card-bg: rgba(15, 15, 15, 0.9);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --option-bg: rgba(30, 30, 30, 0.9);
+            --option-hover: rgba(40, 40, 40, 0.9);
+            --option-selected: rgba(34, 167, 240, 0.2);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--primary);
+            color: var(--text);
+            line-height: 1.6;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('/api/placeholder/1920/1080');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--card-border);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+        
+        .logo img {
+            height: 50px;
+            margin-right: 15px;
+        }
+        
+        .logo h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent) 0%, #5db9ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+        }
+        
+        h2 {
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-top: 0.5rem;
+        }
+        
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .intro {
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+        
+        .intro p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            color: var(--text);
+        }
+        
+        .highlight {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+            color: white;
+            font-weight: 600;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(34, 167, 240, 0.3);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(34, 167, 240, 0.4);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        .question-container {
+            display: none;
+        }
+        
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--card-border);
+        }
+        
+        .question-number {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+        }
+        
+        .progress-container {
+            flex-grow: 1;
+            margin: 0 1.5rem;
+            height: 6px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+            transition: width 0.5s ease;
+        }
+        
+        .timer {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+        }
+        
+        .timer i {
+            margin-right: 6px;
+            color: var(--accent);
+        }
+        
+        .question {
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            line-height: 1.4;
+        }
+        
+        .question-difficulty {
+            display: inline-flex;
+            align-items: center;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-weight: 500;
+        }
+        
+        .difficulty-easy {
+            background-color: rgba(46, 204, 113, 0.2);
+            color: var(--success);
+        }
+        
+        .difficulty-medium {
+            background-color: rgba(243, 156, 18, 0.2);
+            color: var(--warning);
+        }
+        
+        .difficulty-hard {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: var(--danger);
+        }
+        
+        .question-difficulty i {
+            margin-right: 6px;
+        }
+        
+        .options {
+            margin-bottom: 2rem;
+        }
+        
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.2rem;
+            margin-bottom: 1rem;
+            background-color: var(--option-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .option:hover {
+            background-color: var(--option-hover);
+            transform: translateX(5px);
+        }
+        
+        .option .option-letter {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            margin-right: 12px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .option.selected {
+            background-color: var(--option-selected);
+            border-color: var(--accent);
+        }
+        
+        .option.correct {
+            background-color: rgba(46, 204, 113, 0.2);
+            border-color: var(--success);
+        }
+        
+        .option.correct .option-letter {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .option.incorrect {
+            background-color: rgba(231, 76, 60, 0.2);
+            border-color: var(--danger);
+        }
+        
+        .option.incorrect .option-letter {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .feedback {
+            display: none;
+            padding: 1.2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            border-left: 4px solid transparent;
+        }
+        
+        .feedback.correct {
+            background-color: rgba(46, 204, 113, 0.1);
+            border-left-color: var(--success);
+        }
+        
+        .feedback.incorrect {
+            background-color: rgba(231, 76, 60, 0.1);
+            border-left-color: var(--danger);
+        }
+        
+        .action-btn {
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        #form-container, #results-container {
+            display: none;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 1rem;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            font-size: 1rem;
+            color: var(--text);
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--accent);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .form-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .form-header h2 {
+            margin-bottom: 1rem;
+        }
+        
+        .bonus-box {
+            background-color: rgba(34, 167, 240, 0.1);
+            border: 1px solid rgba(34, 167, 240, 0.3);
+            border-radius: 8px;
+            padding: 1.2rem;
+            margin: 1.5rem 0;
+        }
+        
+        .bonus-box p {
+            display: flex;
+            align-items: center;
+        }
+        
+        .bonus-box i {
+            color: var(--accent);
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .result-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .result-medal {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .result-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .progress {
+            height: 12px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            margin: 2rem 0;
+            overflow: hidden;
+        }
+        
+        .progress-bar-result {
+            height: 100%;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.8rem;
+            transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        
+        .cta {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.1) 0%, rgba(39, 174, 96, 0.1) 100%);
+            border: 1px solid rgba(46, 204, 113, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+        
+        .cta p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .cta .btn {
+            background: linear-gradient(135deg, var(--success) 0%, #27ae60 100%);
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+            font-size: 1rem;
+            padding: 1.2rem 2rem;
+        }
+        
+        .cta .btn:hover {
+            box-shadow: 0 8px 20px rgba(46, 204, 113, 0.4);
+        }
+        
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+            gap: 1rem;
+        }
+        
+        .feature {
+            flex: 1;
+            min-width: 200px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 1.2rem;
+            text-align: center;
+            border: 1px solid var(--card-border);
+        }
+        
+        .feature i {
+            font-size: 2rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+        
+        .feature h3 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .feature p {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: var(--text-dark);
+            font-size: 0.8rem;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animated {
+            animation: fadeIn 0.6s ease forwards;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem 1rem;
+            }
+            
+            .card {
+                padding: 1.5rem;
+            }
+            
+            .intro {
+                padding: 2rem 1rem;
+            }
+            
+            .feature {
+                min-width: 100%;
+            }
+            
+            .question {
+                font-size: 1.1rem;
+            }
+            
+            .btn {
+                padding: 0.8rem 1.5rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <img src="/api/placeholder/50/50" alt="Logo">
+                <h1>ANATOMIA SEM MEDO</h1>
+            </div>
+            <h2>Domine os conceitos clínicos com confiança</h2>
+        </header>
+        
+        <div id="intro" class="card intro animated">
+            <p>Domine a <span class="highlight">Anatomia Clínica</span> em menos de 3 minutos e descubra seu nível real de conhecimento.</p>
+            <p>Complete o quiz e receba um <span class="highlight">guia exclusivo</span> com os 5 conceitos anatômicos mais importantes para sua prática clínica! 🎁</p>
+            <button id="start-btn" class="btn">Iniciar Avaliação <i class="fas fa-arrow-right"></i></button>
+        </div>
+        
+        <div id="question-container" class="card question-container animated">
+            <div class="question-header">
+                <div class="question-number">Pergunta <span id="current-question">1</span>/<span id="total-questions">8</span></div>
+                <div class="progress-container">
+                    <div id="question-progress" class="progress-bar" style="width: 12.5%"></div>
+                </div>
+                <div class="timer"><i class="fas fa-clock"></i> <span id="timer">00:30</span></div>
+            </div>
+            
+            <div id="difficulty-indicator" class="question-difficulty difficulty-easy">
+                <i class="fas fa-circle"></i> Fácil
+            </div>
+            
+            <div id="question" class="question">Qual é o maior órgão interno do corpo humano?</div>
+            
+            <div id="options" class="options">
+                <div class="option" data-index="0">
+                    <div class="option-letter">A</div>
+                    <div class="option-text">Coração</div>
+                </div>
+                <div class="option" data-index="1">
+                    <div class="option-letter">B</div>
+                    <div class="option-text">Pulmão</div>
+                </div>
+                <div class="option" data-index="2">
+                    <div class="option-letter">C</div>
+                    <div class="option-text">Fígado</div>
+                </div>
+                <div class="option" data-index="3">
+                    <div class="option-letter">D</div>
+                    <div class="option-text">Rim</div>
+                </div>
+            </div>
+            
+            <div id="feedback" class="feedback"></div>
+            
+            <div class="action-btn">
+                <button id="next-btn" class="btn" style="display: none;">Próxima Pergunta <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+        
+        <div id="form-container" class="card animated">
+            <div class="form-header">
+                <h2>Quase lá! 🎯</h2>
+                <p>Preencha seus dados para receber seu resultado e bônus exclusivo</p>
+            </div>
+            
+            <div class="bonus-box">
+                <p><i class="fas fa-gift"></i> <strong>BÔNUS EXCLUSIVO:</strong> Guia em PDF "<strong>5 Dicas de Anatomia Clínica que Todo Profissional da Saúde Precisa Saber</strong>"</p>
+            </div>
+            
+            <div class="form-group">
+                <label for="name">Nome Completo</label>
+                <input type="text" id="name" required placeholder="Digite seu nome completo">
+            </div>
+            
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" required placeholder="Seu melhor e-mail">
+            </div>
+            
+            <div class="form-group">
+                <label for="area">Área de atuação</label>
+                <select id="area">
+                    <option value="" disabled selected>Selecione sua área</option>
+                    <option value="estudante">Estudante de Medicina</option>
+                    <option value="medico">Médico</option>
+                    <option value="profissional">Outro Profissional de Saúde</option>
+                    <option value="outro">Outro</option>
+                </select>
+            </div>
+            
+            <button id="submit-form" class="btn">Receber Resultado + Guia Exclusivo <i class="fas fa-check"></i></button>
+        </div>
+        
+        <div id="results-container" class="card animated">
+            <div class="result-header">
+                <div id="result-medal" class="result-medal">🥇</div>
+                <div id="result-title" class="result-title">Excelente!</div>
+            </div>
+            
+            <div class="progress">
+                <div id="progress-bar-result" class="progress-bar-result" style="width: 80%; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);">6/8 (75%)</div>
+            </div>
+            
+            <p id="result-message">Você demonstrou um excelente conhecimento em Anatomia Clínica. Seus resultados mostram que você já domina conceitos importantes, mas a excelência é um processo contínuo de aprendizado.</p>
+            
+            <div class="features">
+                <div class="feature">
+                    <i class="fas fa-brain"></i>
+                    <h3>Casos Clínicos</h3>
+                    <p>Aprenda com casos reais e desenvolva raciocínio clínico avançado</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-user-md"></i>
+                    <h3>Professores Elite</h3>
+                    <p>Aulas com os melhores especialistas do Brasil</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-certificate"></i>
+                    <h3>Certificado</h3>
+                    <p>Receba certificado reconhecido para seu currículo</p>
+                </div>
+            </div>
+            
+            <div class="cta">
+                <p id="cta-message">Aproveite nossa oferta exclusiva para alunos que completaram o quiz: curso avançado de Anatomia Clínica com casos reais e acesso vitalício!</p>
+                <button id="cta-btn" class="btn">Quero garantir minha vaga com 50% de desconto <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2025 - Anatomia Sem Medo | Todos os direitos reservados</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Quiz questions and data
+        const questions = [
+            {
+                question: "Qual é o maior órgão interno do corpo humano?",
+                options: ["Coração", "Pulmão", "Fígado", "Rim"],
+                correct: 2,
+                difficulty: "easy",
+                correctFeedback: "✅ Correto! O fígado é o maior órgão interno do corpo humano, pesando cerca de 1,5kg em um adulto médio. Ele desempenha mais de 500 funções vitais, incluindo desintoxicação, metabolismo e produção de proteínas.",
+                incorrectFeedback: "❌ Incorreto. O fígado é o maior órgão interno do corpo humano. Este conhecimento básico é fundamental para diagnósticos precisos em diversas especialidades médicas."
+            },
+            {
+                question: "A \"patela\" é o osso conhecido popularmente como:",
+                options: ["Cotovelo", "Joelho", "Calcanhar", "Tornozelo"],
+                correct: 1,
+                difficulty: "easy",
+                correctFeedback: "✅ Correto! A patela é o osso sesamoide localizado anteriormente à articulação do joelho. Ela protege a articulação e aumenta a eficiência mecânica do músculo quadríceps femoral.",
+                incorrectFeedback: "❌ Incorreto. A patela é o osso popularmente conhecido como joelho (mais precisamente, é o osso da frente do joelho). Este tipo de conhecimento anatômico básico é essencial para qualquer profissional de saúde."
+            },
+            {
+                question: "Qual estrutura produz o líquido cefalorraquidiano (LCR)?",
+                options: ["Plexo braquial", "Plexo coroide", "Corpo caloso", "Gânglios da base"],
+                correct: 1,
+                difficulty: "medium",
+                correctFeedback: "✅ Excelente! O plexo coroide é responsável pela produção do LCR, que circula nos ventrículos cerebrais e no espaço subaracnóideo, protegendo o SNC contra choques e transportando nutrientes.",
+                incorrectFeedback: "❌ Incorreto. O plexo coroide é a estrutura responsável pela produção do LCR. Este conhecimento é fundamental em neuroanatomia e frequentemente avaliado em provas de residência."
+            },
+            {
+                question: "Qual nervo frequentemente lesionado em fraturas do colo cirúrgico do úmero?",
+                options: ["Axilar", "Mediano", "Ulnar", "Radial"],
+                correct: 0,
+                difficulty: "medium",
+                correctFeedback: "✅ Correto! O nervo axilar (circunflexo) é comumente lesionado neste tipo de fratura, podendo causar déficit na abdução do braço e atrofia do músculo deltoide.",
+                incorrectFeedback: "❌ Incorreto. O nervo axilar é frequentemente lesionado em fraturas do colo cirúrgico do úmero. Reconhecer esse risco é crucial para ortopedistas e fisioterapeutas no manejo dessas lesões."
+            },
+            {
+                question: "O músculo responsável pelos primeiros 15° de abdução do braço é o:",
+                options: ["Deltoide", "Supraespinal", "Infraespinal", "Subescapular"],
+                correct: 1,
+                difficulty: "medium",
+                correctFeedback: "✅ Perfeito! O músculo supraespinal inicia a abdução do braço (0-15°), enquanto o deltoide assume a função principal após esse ponto. Esta distinção é crucial para avaliações clínicas precisas.",
+                incorrectFeedback: "❌ Incorreto. O músculo supraespinal é responsável pelos primeiros 15° de abdução do braço. Este detalhe é fundamental para diagnósticos precisos de lesões do manguito rotador."
+            },
+            {
+                question: "Durante uma tireoidectomia, qual nervo lesionado causa rouquidão permanente?",
+                options: ["Laríngeo recorrente", "Frênico", "Hipoglosso", "Vago superior"],
+                correct: 0,
+                difficulty: "hard",
+                correctFeedback: "✅ Excelente! O nervo laríngeo recorrente inerva a maioria dos músculos intrínsecos da laringe. Sua lesão causa paralisia das cordas vocais, resultando em rouquidão permanente.",
+                incorrectFeedback: "❌ Incorreto. O nervo laríngeo recorrente, quando lesionado durante uma tireoidectomia, causa rouquidão permanente devido à paralisia das cordas vocais. Este conhecimento é crucial para cirurgiões."
+            },
+            {
+                question: "A Síndrome do Túnel do Carpo ocorre devido à compressão de qual nervo?",
+                options: ["Ulnar", "Radial", "Mediano", "Musculocutâneo"],
+                correct: 2,
+                difficulty: "hard",
+                correctFeedback: "✅ Correto! A compressão do nervo mediano no túnel do carpo causa parestesia e fraqueza na região tenar, afetando principalmente o polegar, indicador e dedo médio.",
+                incorrectFeedback: "❌ Incorreto. A Síndrome do Túnel do Carpo ocorre devido à compressão do nervo mediano. Este conhecimento é essencial para o diagnóstico correto de uma das neuropatias compressivas mais comuns."
+            },
+            {
+                question: "Qual artéria é normalmente palpada ao verificar o pulso radial?",
+                options: ["Artéria radial", "Artéria braquial", "Artéria femoral", "Artéria ulnar"],
+                correct: 0,
+                difficulty: "hard",
+                correctFeedback: "✅ Perfeito! A artéria radial é palpada na região lateral do punho, sendo um ponto essencial para avaliação da circulação periférica e monitoramento dos sinais vitais.",
+                incorrectFeedback: "❌ Incorreto. A artéria radial é a que palpamos ao verificar o pulso radial. Este conhecimento básico é fundamental para qualquer exame físico adequado."
+            }
+        ];
+        
+        // Initialize variables
+        let currentQuestion = 0;
+        let score = 0;
+        let selectedOption = null;
+        let timer;
+        let timeLeft = 30;
+        
+        // DOM elements
+        const introEl = document.getElementById('intro');
+        const questionContainerEl = document.getElementById('question-container');
+        const currentQuestionEl = document.getElementById('current-question');
+        const totalQuestionsEl = document.getElementById('total-questions');
+        const timerEl = document.getElementById('timer');
+        const difficultyIndicatorEl = document.getElementById('difficulty-indicator');
+        const questionEl = document.getElementById('question');
+        const optionsEl = document.getElementById('options');
+        const feedbackEl = document.getElementById('feedback');
+        const nextBtnEl = document.getElementById('next-btn');
+        const formContainerEl = document.getElementById('form-container');
+        const resultsContainerEl = document.getElementById('results-container');
+        const startBtnEl = document.getElementById('start-btn');
+        const submitFormBtnEl = document.getElementById('submit-form');
+        const questionProgressEl = document.getElementById('question-progress');
+        
+        // Update total questions
+        totalQuestionsEl.textContent = questions.length

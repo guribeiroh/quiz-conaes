@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anatomia Sem Medo - Quiz Clínico</title>
+    <meta name="description" content="Teste seus conhecimentos em anatomia clínica e receba um guia exclusivo com os conceitos mais importantes para sua prática!">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <img src="/api/placeholder/50/50" alt="Logo Anatomia Sem Medo">
+                <h1>ANATOMIA SEM MEDO</h1>
+            </div>
+            <h2>Domine os conceitos clínicos com confiança</h2>
+        </header>
+        
+        <!-- Introdução -->
+        <div id="intro" class="card intro animated">
+            <p>Domine a <span class="highlight">Anatomia Clínica</span> em menos de 3 minutos e descubra seu nível real de conhecimento.</p>
+            <p>Complete o quiz e receba um <span class="highlight">guia exclusivo</span> com os 5 conceitos anatômicos mais importantes para sua prática clínica! 🎁</p>
+            <button id="start-btn" class="btn">Iniciar Avaliação <i class="fas fa-arrow-right"></i></button>
+        </div>
+        
+        <!-- Componente de Questões -->
+        <div id="question-container" class="card question-container">
+            <div class="question-header">
+                <div class="question-number">Pergunta <span id="current-question">1</span>/<span id="total-questions">8</span></div>
+                <div class="progress-container">
+                    <div id="question-progress" class="progress-bar" style="width: 12.5%"></div>
+                </div>
+                <div class="timer"><i class="fas fa-clock"></i> <span id="timer">00:30</span></div>
+            </div>
+            
+            <div id="difficulty-indicator" class="question-difficulty difficulty-easy">
+                <i class="fas fa-circle"></i> Fácil
+            </div>
+            
+            <div id="question" class="question">Carregando...</div>
+            
+            <div id="options" class="options">
+                <!-- Opções serão inseridas dinamicamente -->
+            </div>
+            
+            <div id="feedback" class="feedback"></div>
+            
+            <div id="action-btn" class="action-btn">
+                <button id="next-btn" class="btn" style="display: inline-block; width: 100%; max-width: 250px;">Próxima Pergunta <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+        
+        <!-- Componente de Formulário -->
+        <div id="form-container" class="card">
+            <div class="form-header">
+                <h2>Quase lá! 🎯</h2>
+                <p>Preencha seus dados para receber seu resultado e bônus exclusivo</p>
+            </div>
+            
+            <div class="bonus-box">
+                <p><i class="fas fa-gift"></i> <strong>BÔNUS EXCLUSIVO:</strong> Guia em PDF "<strong>5 Dicas de Anatomia Clínica que Todo Profissional da Saúde Precisa Saber</strong>"</p>
+            </div>
+            
+            <div class="form-group">
+                <label for="name">Nome Completo</label>
+                <input type="text" id="name" required placeholder="Digite seu nome completo">
+            </div>
+            
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" required placeholder="Seu melhor e-mail">
+            </div>
+            
+            <div class="form-group">
+                <label for="area">Área de atuação</label>
+                <select id="area">
+                    <option value="" disabled selected>Selecione sua área</option>
+                    <option value="estudante">Estudante de Medicina</option>
+                    <option value="medico">Médico</option>
+                    <option value="profissional">Outro Profissional de Saúde</option>
+                    <option value="outro">Outro</option>
+                </select>
+            </div>
+            
+            <button id="submit-form" class="btn">Receber Resultado + Guia Exclusivo <i class="fas fa-check"></i></button>
+        </div>
+        
+        <!-- Componente de Resultados -->
+        <div id="results-container" class="card">
+            <div class="result-header">
+                <div id="result-medal" class="result-medal">🥇</div>
+                <div id="result-title" class="result-title">Excelente!</div>
+            </div>
+            
+            <div class="progress">
+                <div id="progress-bar-result" class="progress-bar-result" style="width: 80%; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);">6/8 (75%)</div>
+            </div>
+            
+            <p id="result-message">Carregando resultados...</p>
+            
+            <div class="features">
+                <div class="feature">
+                    <i class="fas fa-brain"></i>
+                    <h3>Casos Clínicos</h3>
+                    <p>Aprenda com casos reais e desenvolva raciocínio clínico avançado</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-user-md"></i>
+                    <h3>Professores Elite</h3>
+                    <p>Aulas com os melhores especialistas do Brasil</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-certificate"></i>
+                    <h3>Certificado</h3>
+                    <p>Receba certificado reconhecido para seu currículo</p>
+                </div>
+            </div>
+            
+            <div class="cta">
+                <p id="cta-message">Aproveite nossa oferta exclusiva para alunos que completaram o quiz: curso avançado de Anatomia Clínica com casos reais e acesso vitalício!</p>
+                <button id="cta-btn" class="btn">Quero garantir minha vaga com 50% de desconto <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2025 - Anatomia Sem Medo | Todos os direitos reservados</p>
+        </footer>
+    </div>
+    
+    <!-- Scripts -->
+    <script type="module" src="src/main.js"></script>
+</body>
+</html> 
