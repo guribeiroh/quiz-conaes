@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz de Anatomia</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <div class="welcome-screen" id="welcome-screen">
+            <div class="animated-bg"></div>
+            <div class="welcome-content">
+                <div class="brand-header">
+                    <h1 class="brand-title">Quiz de Anatomia</h1>
+                    <p class="brand-subtitle">É HOJE!</p>
+                </div>
+                
+                <div class="welcome-image">
+                    <div class="image-container">
+                        <img src="img/anatomy.svg" alt="Anatomia Humana">
+                        <div class="pulse-effect"></div>
+                    </div>
+                </div>
+                
+                <div class="welcome-text-container">
+                    <p class="welcome-text">Teste seus conhecimentos sobre o corpo humano neste quiz interativo!</p>
+                    <div class="features">
+                        <div class="feature">
+                            <i class="fas fa-brain"></i>
+                            <span>Aprenda</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-trophy"></i>
+                            <span>Desafie-se</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Evolua</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn-start" id="start-button">
+                    <span>Iniciar Quiz</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="quiz-container" id="quiz-container" style="display: none;">
+            <div class="quiz-header">
+                <div class="quiz-info">
+                    <span id="question-number">Pergunta 1/10</span>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="progress-bar"></div>
+                    </div>
+                </div>
+                <div class="timer-container">
+                    <div class="timer-icon">
+                        <i class="fas fa-hourglass-half"></i>
+                    </div>
+                    <div class="timer-wrapper">
+                        <div class="timer-ring">
+                            <svg class="timer-circle" viewBox="0 0 100 100">
+                                <circle class="timer-path-elapsed" cx="50" cy="50" r="45"></circle>
+                                <circle class="timer-path-remaining" id="timer-path-remaining" cx="50" cy="50" r="45"></circle>
+                            </svg>
+                            <div class="timer-value" id="timer">30</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="quiz-content">
+                <h2 id="question-text">Pergunta aparecerá aqui</h2>
+                <div class="options-container" id="options-container">
+                    <!-- Opções serão inseridas aqui via JavaScript -->
+                </div>
+            </div>
+            
+            <div class="quiz-footer">
+                <button class="btn-next" id="next-button" disabled>Próxima <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+
+        <div class="signup-container" id="form-container" style="display: none;">
+            <div class="signup-particles"></div>
+            <div class="signup-content">
+                <div class="signup-header">
+                    <div class="signup-icon">
+                        <svg viewBox="0 0 100 100" class="lock-icon">
+                            <circle class="lock-circle" cx="50" cy="50" r="45"/>
+                            <path class="lock-body" d="M65,45 v-15 c0,-8.284 -6.716,-15 -15,-15 c-8.284,0 -15,6.716 -15,15 v15"/>
+                            <rect class="lock-base" x="35" y="45" width="30" height="25" rx="3" ry="3"/>
+                            <circle class="lock-keyhole" cx="50" cy="58" r="5"/>
+                        </svg>
+                    </div>
+                    <h2 class="signup-title">Seus resultados estão prontos!</h2>
+                    <p class="signup-subtitle">Desbloqueie seu relatório completo e avance seu conhecimento em Anatomia</p>
+                </div>
+                
+                <div class="benefits-list">
+                    <div class="benefit-item">
+                        <div class="benefit-icon"><i class="fas fa-chart-line"></i></div>
+                        <div class="benefit-text">Análise detalhada do seu desempenho</div>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon"><i class="fas fa-graduation-cap"></i></div>
+                        <div class="benefit-text">Material educacional personalizado</div>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon"><i class="fas fa-percent"></i></div>
+                        <div class="benefit-text">Acesso a ofertas exclusivas do curso</div>
+                    </div>
+                </div>
+                
+                <form id="user-form" class="signup-form">
+                    <div class="form-group">
+                        <div class="input-icon-wrapper">
+                            <i class="fas fa-user input-icon"></i>
+                            <input type="text" id="name" name="name" placeholder="Seu nome completo" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-icon-wrapper">
+                            <i class="fas fa-envelope input-icon"></i>
+                            <input type="email" id="email" name="email" placeholder="Seu melhor e-mail" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-icon-wrapper">
+                            <i class="fas fa-phone-alt input-icon"></i>
+                            <input type="tel" id="phone" name="phone" placeholder="Seu WhatsApp" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-submit pulse-btn">
+                        <span class="btn-text">Desbloquear Resultados</span>
+                        <span class="btn-icon"><i class="fas fa-unlock-alt"></i></span>
+                    </button>
+                </form>
+                
+                <div class="privacy-notice">
+                    <i class="fas fa-shield-alt"></i>
+                    <p>Seus dados estão seguros e não serão compartilhados com terceiros.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="results-container" id="results-container" style="display: none;">
+            <div class="results-hero">
+                <div class="hero-glow"></div>
+                <h2 class="results-title">Seu Resultado <span class="accent">Anatomia</span></h2>
+                
+                <!-- Cartão de pontuação com design melhorado -->
+                <div class="score-card">
+                    <div class="score-circle">
+                        <svg class="score-svg" viewBox="0 0 100 100">
+                            <circle class="score-bg" cx="50" cy="50" r="45"></circle>
+                            <circle class="score-progress" id="score-progress" cx="50" cy="50" r="45"></circle>
+                        </svg>
+                        <div class="score-text-center">
+                            <span id="score-value" class="score-number">0</span>
+                            <span class="score-total">/10</span>
+                        </div>
+                    </div>
+                    <div class="score-details">
+                        <h3 class="result-level" id="result-level">Iniciante em Anatomia</h3>
+                        <p id="score-message" class="score-description">Mensagem baseada na pontuação</p>
+                        <div class="score-badge" id="score-badge">NÍVEL BÁSICO</div>
+                    </div>
+                </div>
+                
+                <!-- Informações do usuário se houverem -->
+                <div class="user-info-card" id="user-info">
+                    <!-- Será preenchido via JavaScript -->
+                </div>
+            </div>
+            
+            <!-- Seção principal de promoção do curso -->
+            <div class="course-promotion">
+                <div class="pulse-divider">
+                    <span class="pulse-dot"></span>
+                    <span class="pulse-dot"></span>
+                    <span class="pulse-dot"></span>
+                </div>
+                
+                <!-- Cabeçalho personalizado baseado na pontuação -->
+                <div class="course-header">
+                    <div class="header-badge">
+                        <span>Curso Premium</span>
+                    </div>
+                    <h2 class="course-main-title">Anatomia sem Medo</h2>
+                    <h3 class="course-tagline" id="course-tagline">Domine todos os sistemas do corpo humano em 8 semanas</h3>
+                </div>
+                
+                <!-- Banner de destaque responsivo -->
+                <div class="course-banner">
+                    <div class="banner-content">
+                        <div class="banner-text">
+                            <h3>O conhecimento que faltava para sua carreira</h3>
+                            <p id="banner-personalized">Com base no seu desempenho, você tem potencial para dominar a anatomia humana com o método certo!</p>
+                        </div>
+                        <div class="banner-image">
+                            <img src="img/anatomy.svg" alt="Anatomia sem Medo">
+                            <div class="image-glow"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Características principais do curso -->
+                <div class="course-features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-book-medical"></i>
+                        </div>
+                        <h4>Conteúdo Completo</h4>
+                        <p>Estude todos os sistemas do corpo humano com material de fácil compreensão</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h4>Professores Especializados</h4>
+                        <p>Aprenda com profissionais com anos de experiência na área médica</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h4>Acesso em Qualquer Dispositivo</h4>
+                        <p>Estude em casa, no trabalho ou em deslocamento, em qualquer dispositivo</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                        <h4>Certificado Reconhecido</h4>
+                        <p>Receba um certificado de conclusão válido para horas complementares</p>
+                    </div>
+                </div>
+                
+                <!-- Depoimentos -->
+                <div class="testimonials-section">
+                    <h3 class="section-title">O que dizem nossos alunos</h3>
+                    <div class="testimonials-container">
+                        <div class="testimonial-card">
+                            <div class="testimonial-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p class="testimonial-text">"Depois de tentar estudar anatomia por anos, este curso finalmente me fez entender tudo de forma clara e objetiva."</p>
+                            <div class="testimonial-author">
+                                <div class="author-image">
+                                    <span>CP</span>
+                                </div>
+                                <div class="author-info">
+                                    <h4>Carla P.</h4>
+                                    <p>Estudante de Fisioterapia</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="testimonial-card">
+                            <div class="testimonial-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p class="testimonial-text">"O método de ensino é revolucionário! Nunca pensei que estudar anatomia poderia ser tão envolvente e até divertido."</p>
+                            <div class="testimonial-author">
+                                <div class="author-image">
+                                    <span>RM</span>
+                                </div>
+                                <div class="author-info">
+                                    <h4>Rafael M.</h4>
+                                    <p>Estudante de Medicina</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Seção de oferta especial -->
+                <div class="special-offer-section">
+                    <div class="offer-badge" id="special-badge">
+                        <div class="badge-content">
+                            <span class="highlight">40% OFF</span>
+                            <span class="badge-small">Oferta especial</span>
+                        </div>
+                    </div>
+                    
+                    <div class="offer-details">
+                        <h3>Oferta Exclusiva para Participantes do Quiz</h3>
+                        <div class="price-area">
+                            <div class="old-price">
+                                <span>De R$ 497</span>
+                            </div>
+                            <div class="current-price">
+                                <span class="price-value">12x R$ 24,85</span>
+                                <span class="price-total">ou R$ 298 à vista</span>
+                            </div>
+                        </div>
+                        
+                        <div class="countdown-container">
+                            <h4 class="countdown-title">Esta oferta expira em:</h4>
+                            <div class="countdown-timer">
+                                <div class="countdown-box">
+                                    <div class="countdown-number" id="hours">24</div>
+                                    <div class="countdown-label">horas</div>
+                                </div>
+                                <div class="countdown-separator">:</div>
+                                <div class="countdown-box">
+                                    <div class="countdown-number" id="minutes">00</div>
+                                    <div class="countdown-label">minutos</div>
+                                </div>
+                                <div class="countdown-separator">:</div>
+                                <div class="countdown-box seconds-box">
+                                    <div class="countdown-number" id="seconds">00</div>
+                                    <div class="countdown-label">segundos</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="guarantee">
+                            <i class="fas fa-shield-alt"></i>
+                            <p>Garantia incondicional de 30 dias. Se não gostar, devolvemos seu dinheiro.</p>
+                        </div>
+                        
+                        <a href="#" class="btn-enroll" id="btn-enroll">
+                            <span>QUERO APRENDER ANATOMIA</span>
+                        </a>
+                        
+                        <div class="payment-methods">
+                            <p>Aceitamos todas as formas de pagamento</p>
+                            <div class="payment-icons">
+                                <i class="fab fa-cc-visa"></i>
+                                <i class="fab fa-cc-mastercard"></i>
+                                <i class="fab fa-cc-amex"></i>
+                                <i class="fab fa-pix"></i>
+                                <i class="fas fa-barcode"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Perguntas frequentes -->
+                <div class="faq-section">
+                    <h3 class="section-title">Perguntas Frequentes</h3>
+                    <div class="faq-container">
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <h4>Quanto tempo tenho acesso ao curso?</h4>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Você terá acesso vitalício ao curso e todas as atualizações futuras sem custo adicional.</p>
+                            </div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <h4>Preciso ter conhecimento prévio em anatomia?</h4>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Não! O curso foi desenvolvido para todos os níveis, desde iniciantes absolutos até profissionais que desejam revisar conceitos.</p>
+                            </div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <h4>Como funciona a garantia de 30 dias?</h4>
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Se dentro de 30 dias você não estiver satisfeito com o curso por qualquer motivo, basta solicitar o reembolso e devolveremos 100% do valor investido, sem perguntas.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Call to action final -->
+                <div class="final-cta">
+                    <h3>Transforme seu conhecimento em anatomia</h3>
+                    <p id="final-message">Não deixe que a dificuldade em anatomia limite seu potencial profissional.</p>
+                    <a href="#" class="btn-final-action">
+                        <span>GARANTIR MINHA VAGA</span>
+                    </a>
+                </div>
+            </div>
+            
+    
+        </div>
+        
+        <!-- Efeito de overlay para tempo excedido -->
+        <div class="timeout-overlay" id="timeout-overlay" style="display: none;">
+            <div class="timeout-effect">
+                <div class="timeout-circle"></div>
+                <div class="timeout-pulse"></div>
+                <div class="timeout-content">
+                    <div class="timeout-header">
+                        <div class="timeout-icon-container">
+                            <svg class="timeout-icon" viewBox="0 0 100 100">
+                                <circle class="timeout-icon-bg" cx="50" cy="50" r="45"></circle>
+                                <path class="timeout-icon-hourglass" d="M35,25 L65,25 L65,35 Q65,50 50,50 Q35,50 35,35 L35,25 Z M35,75 L65,75 L65,65 Q65,50 50,50 Q35,50 35,65 L35,75 Z"></path>
+                                <line class="timeout-icon-line" x1="35" y1="25" x2="65" y2="25"></line>
+                                <line class="timeout-icon-line" x1="35" y1="75" x2="65" y2="75"></line>
+                                <path class="timeout-sand-top" d="M50,35 Q58,44 50,50 Q42,44 50,35 Z"></path>
+                                <path class="timeout-sand-falling" d="M50,50 L50,65"></path>
+                                <path class="timeout-sand-bottom" d="M50,65 Q58,70 50,75 Q42,70 50,65 Z"></path>
+                            </svg>
+                        </div>
+                        <h2 class="timeout-title">Tempo Esgotado</h2>
+                    </div>
+                    <p class="timeout-message">O tempo acabou para esta questão!</p>
+                    <div class="timeout-actions">
+                        <button class="timeout-btn timeout-retry" id="try-again-btn">
+                            <span class="btn-text">Tentar Novamente</span>
+                            <div class="btn-icon">
+                                <i class="fas fa-redo-alt"></i>
+                            </div>
+                        </button>
+                        <button class="timeout-btn timeout-skip" id="skip-btn">
+                            <span class="btn-text">Próxima Questão</span>
+                            <div class="btn-icon">
+                                <i class="fas fa-forward"></i>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Popup de inatividade -->
+        <div class="popup" id="inactivity-popup" style="display: none;">
+            <div class="popup-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h3>Inatividade Detectada</h3>
+            <p>Você não respondeu dentro do tempo limite por duas vezes consecutivas.</p>
+            <div class="popup-buttons">
+                <button class="popup-btn popup-btn-primary" id="restart-quiz-btn">Reiniciar Quiz</button>
+            </div>
+        </div>
+
+        <!-- Feedback Popups Modernos -->
+        <div class="overlay" id="feedbackOverlay"></div>
+        
+        <!-- Popup de Feedback para Respostas Corretas -->
+        <div class="feedback-popup feedback-correct" id="correctFeedbackPopup">
+            <div class="feedback-particles" id="correctParticles"></div>
+            <div class="feedback-header">
+                <div class="feedback-icon-container">
+                    <i class="fas fa-check feedback-icon-correct"></i>
+                </div>
+                <h3 class="feedback-title">Resposta Correta!</h3>
+            </div>
+            <div class="feedback-content">
+                <p class="feedback-message" id="correctFeedbackMessage">Parabéns! Você acertou esta questão.</p>
+ 
+                <div class="progress-indicator">
+                    <div class="progress-bar" id="correctProgressBar"></div>
+                </div>
+                <div class="feedback-actions">
+                    <button class="btn-feedback" id="correctNextBtn">
+                        <span>Próxima Questão</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Popup de Feedback para Respostas Incorretas -->
+        <div class="feedback-popup feedback-incorrect" id="incorrectFeedbackPopup">
+            <div class="feedback-particles" id="incorrectParticles"></div>
+            <div class="feedback-header">
+                <div class="feedback-icon-container">
+                    <i class="fas fa-times feedback-icon-incorrect"></i>
+                </div>
+                <h3 class="feedback-title">Não foi dessa vez</h3>
+            </div>
+            <div class="feedback-content">
+                <p class="feedback-message" id="incorrectFeedbackMessage">A resposta correta era: <strong id="correctAnswerText"></strong></p>
+                <div class="feedback-fact" id="incorrectFeedbackFact">
+                    Aprender com os erros é fundamental! Esta é uma oportunidade para fixar o conhecimento.
+                </div>
+                <div class="feedback-actions">
+                    <button class="btn-feedback" id="incorrectNextBtn">
+                        <span>Continuar</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Popup de Tempo Esgotado -->
+        <div class="feedback-popup" id="timeoutFeedbackPopup">
+            <div class="feedback-particles" id="timeoutParticles"></div>
+            <div class="feedback-header">
+                <div class="feedback-icon-container">
+                    <i class="fas fa-clock feedback-icon-incorrect"></i>
+                </div>
+                <h3 class="feedback-title">Tempo Esgotado!</h3>
+            </div>
+            <div class="feedback-content">
+                <p class="feedback-message">Você não respondeu dentro do tempo limite.</p>
+                <div class="feedback-fact">
+                    Gerenciar o tempo é essencial nos exames de anatomia. Pratique mais para melhorar sua velocidade!
+                </div>
+                <div class="feedback-actions">
+                    <button class="btn-feedback" id="timeoutRetryBtn">
+                        <i class="fas fa-redo"></i>
+                        <span>Tentar Novamente</span>
+                    </button>
+                    <button class="btn-feedback" id="timeoutNextBtn">
+                        <span>Próxima</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>Quiz de Anatomia 2025</p>
+    </footer>
+
+    <script src="js/questions.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
