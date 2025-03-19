@@ -179,6 +179,11 @@
                 </div>
             </div>
             
+            <!-- Seção de diagnóstico detalhado -->
+            <div class="diagnostico-container" id="diagnostico-detalhado">
+                <!-- Será preenchido via JavaScript -->
+            </div>
+            
             <!-- Seção principal de promoção do curso -->
             <div class="course-promotion">
                 <div class="pulse-divider">
@@ -292,7 +297,7 @@
                     <div class="offer-badge" id="special-badge">
                         <div class="badge-content">
                             <span class="highlight">40% OFF</span>
-                            <span class="badge-small">Oferta especial</span>
+                            <span class="badge-small" id="special-badge-message">Oferta especial</span>
                         </div>
                     </div>
                     
@@ -348,6 +353,20 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                
+                <!-- Módulos recomendados baseados no diagnóstico -->
+                <div class="modulos-recomendados-section">
+                    <h3 class="section-title">Módulos Personalizados para Você</h3>
+                    
+                    <!-- Módulo principal recomendado -->
+                    <div id="modulo-principal"></div>
+                    
+                    <!-- Benefícios do módulo principal -->
+                    <div id="beneficios-modulo"></div>
+                    
+                    <!-- Outros módulos recomendados -->
+                    <div id="modulos-recomendados"></div>
                 </div>
                 
                 <!-- Perguntas frequentes -->

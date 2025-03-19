@@ -50,6 +50,9 @@ document.addEventListener('DOMContentLoaded', function() {
     let timer;
     let timeLeft = 30;
     
+    // Armazenar respostas do usuário para análise personalizada
+    let userAnswers = [];
+    
     // Verificações críticas e debug
     if (!welcomeScreen) console.error("[Quiz Anatomia] Elemento não encontrado: welcome-screen");
     if (!quizContainer) console.error("[Quiz Anatomia] Elemento não encontrado: quiz-container");
@@ -147,6 +150,7 @@ document.addEventListener('DOMContentLoaded', function() {
             currentQuestionIndex = 0;
             score = 0;
             selectedOption = null;
+            userAnswers = []; // Limpar respostas anteriores
             
             // Carregar a primeira pergunta
             loadQuestion(0);
@@ -260,6 +264,16 @@ document.addEventListener('DOMContentLoaded', function() {
             if (nextButton) {
                 nextButton.disabled = false;
             }
+            
+            // Registrar resposta para análise personalizada
+            userAnswers[currentQuestionIndex] = {
+                questionIndex: currentQuestionIndex,
+                question: questions[currentQuestionIndex].question,
+                userAnswerIndex: optionIndex,
+                correctAnswerIndex: questions[currentQuestionIndex].answer,
+                isCorrect: optionIndex === questions[currentQuestionIndex].answer,
+                category: questions[currentQuestionIndex].category || 'geral'
+            };
         } catch (error) {
             console.error(`[Quiz Anatomia] Erro ao selecionar opção: ${error.message}`);
         }
@@ -318,6 +332,15 @@ document.addEventListener('DOMContentLoaded', function() {
             const courseTagline = document.getElementById('course-tagline');
             const bannerPersonalized = document.getElementById('banner-personalized');
             const finalMessage = document.getElementById('final-message');
+            const diagnosticoDetalhado = document.getElementById('diagnostico-detalhado');
+            const btnEnroll = document.getElementById('btn-enroll');
+            const btnFinalAction = document.querySelector('.btn-final-action');
+            
+            // Elementos de venda personalizados
+            const moduloPrincipalEl = document.getElementById('modulo-principal');
+            const beneficiosModuloPrincipalEl = document.getElementById('beneficios-modulo');
+            const modulosRecomendadosEl = document.getElementById('modulos-recomendados');
+            const specialBadgeMessage = document.getElementById('special-badge-message');
             
             // Atualiza o valor da pontuação com animação
             let currentScore = 0;
@@ -385,13 +408,125 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
             
+            // Análise detalhada das respostas para diagnóstico personalizado
+            const diagnostico = analisarRespostas(userAnswers);
+            
+            // Personalização da oferta com base no diagnóstico
+            if (btnEnroll) {
+                switch (diagnostico.piorCategoria) {
+                    case 'sistema_nervoso':
+                        btnEnroll.innerHTML = '<span>DOMINAR O SISTEMA NERVOSO AGORA</span>';
+                        break;
+                    case 'sistema_muscular':
+                        btnEnroll.innerHTML = '<span>MEMORIZAR MÚSCULOS SEM ESFORÇO</span>';
+                        break;
+                    case 'sistema_circulatorio':
+                        btnEnroll.innerHTML = '<span>ENTENDER O SISTEMA CARDIOVASCULAR</span>';
+                        break;
+                    case 'sistema_osseo':
+                        btnEnroll.innerHTML = '<span>DOMINAR O SISTEMA ESQUELÉTICO</span>';
+                        break;
+                    case 'sistema_digestivo':
+                        btnEnroll.innerHTML = '<span>COMPREENDER O SISTEMA DIGESTÓRIO</span>';
+                        break;
+                    default:
+                        btnEnroll.innerHTML = '<span>QUERO APRENDER ANATOMIA</span>';
+                }
+            }
+            
+            // Personalização da CTA final
+            if (btnFinalAction) {
+                switch (diagnostico.piorCategoria) {
+                    case 'sistema_nervoso':
+                        btnFinalAction.innerHTML = '<span>ACABAR COM MINHAS DÚVIDAS EM NEUROANATOMIA</span>';
+                        break;
+                    case 'sistema_muscular':
+                        btnFinalAction.innerHTML = '<span>MEMORIZAR MÚSCULOS DE FORMA DEFINITIVA</span>';
+                        break;
+                    case 'sistema_circulatorio':
+                        btnFinalAction.innerHTML = '<span>DOMINAR O SISTEMA CARDIOVASCULAR</span>';
+                        break;
+                    case 'sistema_osseo':
+                        btnFinalAction.innerHTML = '<span>APRENDER TODOS OS OSSOS SEM CONFUSÃO</span>';
+                        break;
+                    case 'sistema_digestivo':
+                        btnFinalAction.innerHTML = '<span>COMPREENDER TODO O PROCESSO DIGESTIVO</span>';
+                        break;
+                    default:
+                        btnFinalAction.innerHTML = '<span>GARANTIR MINHA VAGA</span>';
+                }
+            }
+            
+            // Personalização da message do special badge
+            if (specialBadgeMessage) {
+                specialBadgeMessage.textContent = `OFERTA ESPECIAL PARA O MÓDULO ${diagnostico.moduloPrincipal}`;
+            }
+            
             // Atualiza os elementos na página com as mensagens condicionais
             if (scoreMessage) scoreMessage.textContent = `Você acertou ${score} de ${questions.length} questões.`;
             if (resultLevel) resultLevel.textContent = levelMessage;
             if (scoreBadge) scoreBadge.textContent = badgeText;
-            if (courseTagline) courseTagline.textContent = taglineText;
-            if (bannerPersonalized) bannerPersonalized.textContent = personalizedText;
-            if (finalMessage) finalMessage.textContent = finalCta;
+            if (courseTagline) courseTagline.textContent = `${diagnostico.tituloModuloPrincipal}: ${taglineText}`;
+            if (bannerPersonalized) bannerPersonalized.textContent = `${personalizedText} Especialmente o módulo de ${diagnostico.tituloModuloPrincipal}, feito para pessoas com seu perfil de aprendizado.`;
+            if (finalMessage) finalMessage.textContent = `${finalCta} Nosso módulo de ${diagnostico.tituloModuloPrincipal} é especialmente recomendado para seu perfil.`;
+            
+            // Atualiza módulo principal recomendado
+            if (moduloPrincipalEl) {
+                moduloPrincipalEl.innerHTML = `
+                    <div class="modulo-destaque">
+                        <div class="modulo-numero">MÓDULO ${diagnostico.moduloPrincipal}</div>
+                        <h3>${diagnostico.tituloModuloPrincipal}</h3>
+                        <p class="modulo-descricao">${diagnostico.descricaoModuloPrincipal}</p>
+                        <div class="modulo-badge">MAIS RECOMENDADO PARA VOCÊ</div>
+                    </div>
+                `;
+            }
+            
+            // Atualiza os benefícios do módulo principal
+            if (beneficiosModuloPrincipalEl) {
+                beneficiosModuloPrincipalEl.innerHTML = `
+                    <div class="beneficios-modulo">
+                        <h4>Por que este módulo é perfeito para você:</h4>
+                        <p>${diagnostico.beneficiosModuloPrincipal}</p>
+                    </div>
+                `;
+            }
+            
+            // Atualiza os módulos secundários recomendados
+            if (modulosRecomendadosEl && diagnostico.modulosSecundarios.length > 0) {
+                let modulosHTML = '<h4>Outros módulos complementares para você:</h4><div class="modulos-grid">';
+                
+                diagnostico.modulosSecundarios.forEach(modulo => {
+                    modulosHTML += `
+                        <div class="modulo-card">
+                            <div class="modulo-numero">MÓDULO ${modulo.modulo}</div>
+                            <h5>${modulo.titulo}</h5>
+                        </div>
+                    `;
+                });
+                
+                modulosHTML += '</div>';
+                modulosRecomendadosEl.innerHTML = modulosHTML;
+            }
+            
+            // Exibir diagnóstico detalhado se o elemento existir
+            if (diagnosticoDetalhado) {
+                diagnosticoDetalhado.innerHTML = `
+                    <h3>Seu Diagnóstico Personalizado</h3>
+                    <div class="diagnostico-card">
+                        <h4>Pontos Fortes</h4>
+                        <p>${diagnostico.pontosFortes}</p>
+                    </div>
+                    <div class="diagnostico-card">
+                        <h4>Áreas para Melhorar</h4>
+                        <p>${diagnostico.areasParaMelhorar}</p>
+                    </div>
+                    <div class="diagnostico-card">
+                        <h4>Recomendações Personalizadas</h4>
+                        <p>${diagnostico.recomendacoes}</p>
+                    </div>
+                `;
+            }
             
             // Iniciar o cronômetro regressivo
             startCountdown();
@@ -401,6 +536,255 @@ document.addEventListener('DOMContentLoaded', function() {
         } catch (error) {
             console.error(`[Quiz Anatomia] Erro ao exibir resultados: ${error.message}`);
         }
+    }
+    
+    // Função para analisar as respostas e gerar um diagnóstico personalizado
+    function analisarRespostas(respostas) {
+        // Inicializar contadores por categoria
+        const categorias = {
+            'sistema_nervoso': { acertos: 0, total: 0 },
+            'sistema_muscular': { acertos: 0, total: 0 },
+            'sistema_circulatorio': { acertos: 0, total: 0 },
+            'sistema_osseo': { acertos: 0, total: 0 },
+            'sistema_digestivo': { acertos: 0, total: 0 },
+            'geral': { acertos: 0, total: 0 }
+        };
+        
+        // Analisar cada resposta
+        respostas.forEach(resposta => {
+            const categoria = resposta.category || 'geral';
+            
+            // Incrementar contadores de categoria
+            if (categorias[categoria]) {
+                categorias[categoria].total++;
+                if (resposta.isCorrect) {
+                    categorias[categoria].acertos++;
+                }
+            } else {
+                // Categoria não definida, usar 'geral'
+                categorias['geral'].total++;
+                if (resposta.isCorrect) {
+                    categorias['geral'].acertos++;
+                }
+            }
+        });
+        
+        // Identificar pontos fortes (categorias com mais de 70% de acertos)
+        const pontosFortes = [];
+        // Identificar áreas para melhorar (categorias com menos de 50% de acertos)
+        const areasParaMelhorar = [];
+        
+        for (const [categoria, dados] of Object.entries(categorias)) {
+            if (dados.total === 0) continue; // Pular categorias sem perguntas
+            
+            const percentualAcerto = (dados.acertos / dados.total) * 100;
+            
+            if (percentualAcerto >= 70) {
+                switch (categoria) {
+                    case 'sistema_nervoso':
+                        pontosFortes.push("Sistema Nervoso: Você demonstra bom conhecimento sobre o cérebro e funções neurais.");
+                        break;
+                    case 'sistema_muscular':
+                        pontosFortes.push("Sistema Muscular: Você tem boa compreensão sobre músculos e suas funções.");
+                        break;
+                    case 'sistema_circulatorio':
+                        pontosFortes.push("Sistema Circulatório: Você entende bem os conceitos de circulação sanguínea.");
+                        break;
+                    case 'sistema_osseo':
+                        pontosFortes.push("Sistema Ósseo: Você tem conhecimento sólido sobre ossos e estruturas relacionadas.");
+                        break;
+                    case 'sistema_digestivo':
+                        pontosFortes.push("Sistema Digestivo: Você compreende bem os processos digestivos.");
+                        break;
+                    case 'geral':
+                        pontosFortes.push("Conhecimento Geral: Você possui boa base em conceitos anatômicos gerais.");
+                        break;
+                }
+            } else if (percentualAcerto < 50) {
+                switch (categoria) {
+                    case 'sistema_nervoso':
+                        areasParaMelhorar.push("Sistema Nervoso: Aprofunde seus estudos sobre estruturas cerebrais e funções neurais.");
+                        break;
+                    case 'sistema_muscular':
+                        areasParaMelhorar.push("Sistema Muscular: Revise os principais grupos musculares e suas funções.");
+                        break;
+                    case 'sistema_circulatorio':
+                        areasParaMelhorar.push("Sistema Circulatório: Dedique mais atenção ao coração e vasos sanguíneos.");
+                        break;
+                    case 'sistema_osseo':
+                        areasParaMelhorar.push("Sistema Ósseo: Revise as estruturas ósseas e suas funções no corpo humano.");
+                        break;
+                    case 'sistema_digestivo':
+                        areasParaMelhorar.push("Sistema Digestivo: Estude mais sobre o processo de digestão e absorção de nutrientes.");
+                        break;
+                    case 'geral':
+                        areasParaMelhorar.push("Conhecimento Geral: Fortaleça sua base em anatomia geral para melhor compreensão.");
+                        break;
+                }
+            }
+        }
+        
+        // Gerar recomendações personalizadas baseadas no padrão de respostas
+        let recomendacoes = "";
+        
+        // Verificar se existem padrões específicos nas respostas incorretas
+        const respostasIncorretas = respostas.filter(r => !r.isCorrect);
+        
+        if (respostasIncorretas.length === 0) {
+            recomendacoes = "Parabéns! Você demonstrou excelente conhecimento em anatomia. Recomendamos continuar seus estudos com materiais mais avançados e aprofundados.";
+        } else {
+            // Verificar sistema com maior dificuldade
+            let piorCategoria = 'geral';
+            let piorDesempenho = 100;
+            
+            for (const [categoria, dados] of Object.entries(categorias)) {
+                if (dados.total === 0) continue;
+                const percentualAcerto = (dados.acertos / dados.total) * 100;
+                if (percentualAcerto < piorDesempenho) {
+                    piorDesempenho = percentualAcerto;
+                    piorCategoria = categoria;
+                }
+            }
+            
+            // Recomendações baseadas na categoria com pior desempenho
+            switch (piorCategoria) {
+                case 'sistema_nervoso':
+                    recomendacoes = "Recomendamos focar seus estudos no Sistema Nervoso. Utilize material visual como modelos anatômicos e atlas ilustrados. O módulo 9 do curso Anatomia sem Medo aborda este tema de forma detalhada.";
+                    break;
+                case 'sistema_muscular':
+                    recomendacoes = "Sugerimos priorizar o estudo do Sistema Muscular. Utilizar modelos anatômicos e mnemônicos pode ajudar na memorização. O módulo 12 do curso Anatomia sem Medo é dedicado a este tema.";
+                    break;
+                case 'sistema_circulatorio':
+                    recomendacoes = "Recomendamos revisar o Sistema Circulatório, especialmente a anatomia cardíaca e os principais vasos sanguíneos. O módulo 3 do curso Anatomia sem Medo aborda este sistema de forma didática e completa.";
+                    break;
+                case 'sistema_osseo':
+                    recomendacoes = "Sugerimos focar no Sistema Esquelético, utilizando modelos anatômicos e mapas mentais para memorização. O módulo 10 do curso Anatomia sem Medo fornece uma base sólida sobre este tema.";
+                    break;
+                case 'sistema_digestivo':
+                    recomendacoes = "Recomendamos aprofundar seus estudos no Sistema Digestório, com foco nos órgãos e processos digestivos. O módulo 5 do curso Anatomia sem Medo aborda este tema de forma detalhada e prática.";
+                    break;
+                default:
+                    recomendacoes = "Recomendamos revisar os conceitos básicos de anatomia usando um bom atlas anatômico. O módulo 2 de Introdução ao Estudo da Anatomia do curso Anatomia sem Medo foi estruturado para construir gradualmente seu conhecimento, começando pelos fundamentos.";
+            }
+        }
+        
+        // Se não houver pontos fortes identificados
+        if (pontosFortes.length === 0) {
+            pontosFortes.push("Você está começando sua jornada! Com prática e estudo consistente, seus conhecimentos irão melhorar rapidamente.");
+        }
+        
+        // Se não houver áreas para melhorar identificadas
+        if (areasParaMelhorar.length === 0) {
+            areasParaMelhorar.push("Continue aprimorando seus conhecimentos gerais em anatomia para manter seu bom desempenho.");
+        }
+        
+        // Determinando o módulo principal recomendado com base na categoria com pior desempenho
+        let moduloPrincipal = '';
+        let tituloModuloPrincipal = '';
+        let descricaoModuloPrincipal = '';
+        let beneficiosModuloPrincipal = '';
+        
+        switch (piorCategoria || 'geral') {
+            case 'sistema_nervoso':
+                moduloPrincipal = '9';
+                tituloModuloPrincipal = 'SISTEMA NERVOSO';
+                descricaoModuloPrincipal = 'Desvende os mistérios do cérebro e do sistema nervoso com explicações claras e visuais que transformarão conceitos complexos em conhecimento aplicável.';
+                beneficiosModuloPrincipal = 'Entenda as conexões neurais, funções cerebrais e como o sistema nervoso controla todos os aspectos do corpo humano. Ideal para quem tem dificuldade com neuroanatomia.';
+                break;
+            case 'sistema_muscular':
+                moduloPrincipal = '12';
+                tituloModuloPrincipal = 'SISTEMA MUSCULAR';
+                descricaoModuloPrincipal = 'Domine o conhecimento sobre os 600+ músculos do corpo humano através de métodos visuais e mnemônicos exclusivos que facilitam o aprendizado.';
+                beneficiosModuloPrincipal = 'Aprenda as origens, inserções e ações musculares de forma simples e eficaz. Perfeito para quem precisa memorizar grupos musculares para provas e concursos.';
+                break;
+            case 'sistema_circulatorio':
+                moduloPrincipal = '3';
+                tituloModuloPrincipal = 'SISTEMA CARDIOVASCULAR';
+                descricaoModuloPrincipal = 'Entenda o funcionamento do coração e vasos sanguíneos com animações dinâmicas e exemplos práticos que tornam o aprendizado intuitivo e eficiente.';
+                beneficiosModuloPrincipal = 'Visualize o fluxo sanguíneo, compreenda a estrutura cardíaca e domine as principais artérias e veias sem confusão. Essencial para quem tem dificuldade com a circulação sanguínea.';
+                break;
+            case 'sistema_osseo':
+                moduloPrincipal = '10';
+                tituloModuloPrincipal = 'SISTEMA ESQUELÉTICO';
+                descricaoModuloPrincipal = 'Memorize todos os 206 ossos do corpo humano com técnicas exclusivas que transformam o estudo do esqueleto em algo simples e até divertido.';
+                beneficiosModuloPrincipal = 'Aprenda a identificar estruturas ósseas, acidentes anatômicos e relações espaciais de forma rápida e permanente. Ideal para quem tem dificuldade em memorizar nomes e localizações.';
+                break;
+            case 'sistema_digestivo':
+                moduloPrincipal = '5';
+                tituloModuloPrincipal = 'SISTEMA DIGESTÓRIO';
+                descricaoModuloPrincipal = 'Compreenda todo o processo digestivo, desde a boca até o ânus, com explicações claras e analogias que facilitam a compreensão de processos complexos.';
+                beneficiosModuloPrincipal = 'Entenda as funções de cada órgão digestivo e como eles trabalham em conjunto para a nutrição do corpo. Perfeito para quem confunde as etapas da digestão e absorção.';
+                break;
+            default:
+                moduloPrincipal = '2';
+                tituloModuloPrincipal = 'INTRODUÇÃO AO ESTUDO DA ANATOMIA';
+                descricaoModuloPrincipal = 'Construa uma base sólida em anatomia com conceitos fundamentais explicados de forma simples e direta, sem jargões desnecessários.';
+                beneficiosModuloPrincipal = 'Domine termos anatômicos, planos, eixos e posições que são a base para o estudo de todos os sistemas. Essencial para iniciantes ou para quem precisa revisar conceitos básicos.';
+        }
+        
+        // Módulos secundários recomendados (áreas com segundo e terceiro piores desempenhos)
+        let modulosSecundarios = [];
+        let categoriasOrdenadas = Object.entries(categorias)
+            .filter(([_, dados]) => dados.total > 0)
+            .map(([categoria, dados]) => ({
+                categoria,
+                percentualAcerto: (dados.acertos / dados.total) * 100
+            }))
+            .sort((a, b) => a.percentualAcerto - b.percentualAcerto);
+            
+        // Pegar a segunda e terceira piores categorias (se existirem)
+        for (let i = 1; i < Math.min(3, categoriasOrdenadas.length); i++) {
+            const categoria = categoriasOrdenadas[i].categoria;
+            switch (categoria) {
+                case 'sistema_nervoso':
+                    modulosSecundarios.push({
+                        modulo: '9',
+                        titulo: 'SISTEMA NERVOSO'
+                    });
+                    break;
+                case 'sistema_muscular':
+                    modulosSecundarios.push({
+                        modulo: '12',
+                        titulo: 'SISTEMA MUSCULAR'
+                    });
+                    break;
+                case 'sistema_circulatorio':
+                    modulosSecundarios.push({
+                        modulo: '3',
+                        titulo: 'SISTEMA CARDIOVASCULAR'
+                    });
+                    break;
+                case 'sistema_osseo':
+                    modulosSecundarios.push({
+                        modulo: '10',
+                        titulo: 'SISTEMA ESQUELÉTICO'
+                    });
+                    break;
+                case 'sistema_digestivo':
+                    modulosSecundarios.push({
+                        modulo: '5',
+                        titulo: 'SISTEMA DIGESTÓRIO'
+                    });
+                    break;
+                default:
+                    modulosSecundarios.push({
+                        modulo: '2',
+                        titulo: 'INTRODUÇÃO AO ESTUDO DA ANATOMIA'
+                    });
+            }
+        }
+        
+        return {
+            pontosFortes: pontosFortes.join(" "),
+            areasParaMelhorar: areasParaMelhorar.join(" "),
+            recomendacoes: recomendacoes,
+            piorCategoria: piorCategoria,
+            moduloPrincipal: moduloPrincipal,
+            tituloModuloPrincipal: tituloModuloPrincipal,
+            descricaoModuloPrincipal: descricaoModuloPrincipal,
+            beneficiosModuloPrincipal: beneficiosModuloPrincipal,
+            modulosSecundarios: modulosSecundarios
+        };
     }
     
     function initFaqToggles() {
