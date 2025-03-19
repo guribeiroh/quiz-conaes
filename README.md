@@ -1,125 +1,33 @@
-# Anatomia Sem Medo - Quiz Clínico
+# Quiz CONAES
 
-Um quiz interativo para testar conhecimentos em anatomia clínica, desenvolvido com JavaScript moderno e boas práticas de desenvolvimento web.
+Um aplicativo web moderno com tema dark mode para testar conhecimentos sobre temas educacionais.
 
-## 🚀 Funcionalidades
+## Características
 
-- Quiz interativo com 8 questões de anatomia clínica
-- Diferentes níveis de dificuldade (fácil, médio, difícil)
-- Temporizador para cada questão
-- Feedback imediato após cada resposta
-- Coleta de dados do usuário
-- Resultados personalizados com base no desempenho
-- Design responsivo e moderno
-- Animações suaves para melhor experiência do usuário
+- Design moderno com tema dark mode
+- Interface responsiva para todos os dispositivos
+- Perguntas interativas sobre temas específicos
+- Feedback detalhado sobre cada resposta
+- Formulário de coleta de dados pessoais para visualizar resultados
+- Relatório completo de desempenho
 
-## 🛠️ Tecnologias Utilizadas
+## Como Executar
 
-- HTML5
-- CSS3 (com variáveis CSS e flexbox)
-- JavaScript (ES6+)
-- Font Awesome para ícones
-- Arquitetura baseada em componentes
+Para executar o aplicativo, basta abrir o arquivo `index.html` em qualquer navegador web moderno.
 
-## 📁 Estrutura do Projeto
+## Estrutura do Projeto
 
-```
-.
-├── css/
-│   └── styles.css
-├── src/
-│   ├── components/
-│   │   ├── QuestionComponent.js
-│   │   ├── FormComponent.js
-│   │   └── ResultsComponent.js
-│   ├── data/
-│   │   └── questions.js
-│   ├── services/
-│   │   └── quizService.js
-│   └── main.js
-├── index.html
-└── README.md
-```
+- `index.html` - Estrutura principal do aplicativo
+- `css/style.css` - Estilos e tema dark mode
+- `js/questions.js` - Banco de perguntas do quiz
+- `js/script.js` - Lógica do aplicativo
+- `img/` - Imagens utilizadas no aplicativo
 
-## 🚀 Como Executar
+## Personalização
 
-1. Clone o repositório:
-```bash
-git clone https://github.com/seu-usuario/anatomia-sem-medo.git
-```
+Você pode personalizar o quiz modificando o arquivo `questions.js` para adicionar, remover ou editar perguntas.
 
-2. Navegue até o diretório do projeto:
-```bash
-cd anatomia-sem-medo
-```
+## Desenvolvedores
 
-3. Inicie um servidor local. Por exemplo, usando Python:
-```bash
-# Python 3
-python -m http.server 8000
-```
-
-4. Acesse o projeto em seu navegador:
-```
-http://localhost:8000
-```
-
-## 🎯 Funcionalidades Principais
-
-### Quiz
-- Questões com diferentes níveis de dificuldade
-- Temporizador de 30 segundos por questão
-- Feedback imediato após cada resposta
-- Barra de progresso
-- Indicador de dificuldade visual
-
-### Formulário
-- Validação em tempo real
-- Campos obrigatórios
-- Validação de e-mail
-- Seleção de área de atuação
-
-### Resultados
-- Cálculo de pontuação
-- Medalhas baseadas no desempenho
-- Mensagens personalizadas
-- Call-to-action adaptativo
-- Barra de progresso animada
-
-## 📱 Responsividade
-
-O projeto é totalmente responsivo e se adapta a diferentes tamanhos de tela:
-- Desktop (> 768px)
-- Tablet (768px)
-- Mobile (< 768px)
-
-## 🎨 Personalização
-
-O projeto utiliza variáveis CSS para fácil personalização de cores e estilos:
-
-```css
-:root {
-    --primary: #1c1c1c;
-    --secondary: #333333;
-    --accent: #22a7f0;
-    /* ... outras variáveis ... */
-}
-```
-
-## 📝 Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
-
-## 🤝 Contribuindo
-
-1. Faça um fork do projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
-
-## 📧 Contato
-
-Seu Nome - [seu-email@exemplo.com](mailto:seu-email@exemplo.com)
-
-Link do projeto: [https://github.com/seu-usuario/anatomia-sem-medo](https://github.com/seu-usuario/anatomia-sem-medo) 
+- Atualizado por TDX Agency
+- Commit realizado em: 24/07/2024
